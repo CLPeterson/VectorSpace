@@ -1,0 +1,94 @@
+#The MIT License (MIT)
+#
+#Copyright (c) 2015 University of Central Florida's Computer Software Engineering
+#Scalable & Secure Systems (CSE - S3) Lab
+#
+#Permission is hereby granted, free of charge, to any person obtaining a copy
+#of this software and associated documentation files (the "Software"), to deal
+#in the Software without restriction, including without limitation the rights
+#to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+#copies of the Software, and to permit persons to whom the Software is
+#furnished to do so, subject to the following conditions:
+#
+#The above copyright notice and this permission notice shall be included in
+#all copies or substantial portions of the Software.
+#
+#THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+#IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+#FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+#AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+#LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+#OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+#THE SOFTWARE.
+#
+
+DEBUG = -DDEBUG=1 -g -g3  -Wall
+# RELEASE = -O3 -DNDEBUG
+
+delay ?= 10000
+limit ?= 10000
+version ?= NA
+
+tervelINC = "-I../../"
+tervelSources= "$(shell find ../util/ -name '*.cc')"
+tervelFlags="-DUSE_TERVEL_METRICS -DTERVEL_PROG_ASSUR_DELAY=$(delay) -DTERVEL_PROG_ASSUR_LIMIT=$(limit)"
+
+CXX      = g++
+#CXXFLAGS = $(RELEASE) $(DEBUG) $(cFlags) -DCONTAINER_FILE=$(input) -DINTEL -std=c++11  -march=native -m64 -pthread -fno-strict-aliasing
+CXXFLAGS = $(RELEASE) $(DEBUG) $(cFlags) -DCONTAINER_FILE=$(input) -DINTEL -ltbb -std=c++11 -march=native -m64 -pthread -fno-strict-aliasing# -lOpenCL
+#CXXFLAGS=-I. -ltbb -std=c++0x -pthread
+#ADDED -ltbb
+
+# $(info CXXFLAGS is $(CXXFLAGS))
+
+INC= $(cINC)
+LIB = $(cLIB) -ldl -lgflags -lpthread -lrt #-lOpenCL
+
+# LIB += -lrt /usr/local/lib/libpapi.a
+# cFlags += -DUSE_PAPI
+
+SOURCES = $(cSources)
+
+#EXECUTABLE ?=src/main.cc
+EXECUTABLE ?=bench/main.cc
+OBJECTS = $(SOURCES:.cc=.o) bench/util/random.o bench/util/threadlocals.o bench/util/allocation.o
+
+output ?= $(input).x
+OUTPUT = executables/
+
+.PHONY: all
+	$(MAKE) allTervel
+
+.PHONY: allTervel
+allTervel: tervelStackLF
+
+tervelStackLF:
+	$(MAKE) test input="tervel_api/lf_stack_api.h" output="benchmark.x" cSources=$(tervelSources) cINC=$(tervelINC) cFlags=$(tervelFlags)
+
+.PHONY: test
+test: $(SOURCES) $(EXECUTABLE)
+
+.PHONY: $(EXECUTABLE)
+$(EXECUTABLE): $(OBJECTS)
+	mkdir -p $(OUTPUT)
+	$(CXX) $(CPPFLAGS) $(INC)  -o $(OUTPUT)$(output) $(EXECUTABLE) $^ $(CXXFLAGS) $(LIB) $(TOBJS)
+#	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(INC)  -o $(OUTPUT)$(output) $(EXECUTABLE) $^ $(LIB) $(TOBJS)
+
+%.o: %.cc
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(INC) -c -o $@ $<
+
+#%.o: ../../main.cc
+#	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(INC) -c -o $@ $<
+
+#main: main.o $(OBJECTS)
+#	$(CXX) $(INC) -o $@ $^ $(CXXFLAGS) $(LIB) $(TOBJS)
+
+.PHONY: clean
+clean:
+	$(RM) $(OUTPUT)*.x
+
+.PHONY: clean-all
+clean-all:
+	$(RM) $(OUTPUT)*.x
+	$(RM) $(shell find ../util/ -name '*.o')
+	

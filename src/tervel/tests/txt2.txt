@@ -1,0 +1,226 @@
+libboost-atomic1.65-dev - atomic data types, operations, and memory ordering constraints
+libboost-atomic1.65.1 - atomic data types, operations, and memory ordering constraints
+libboost-chrono1.65-dev - C++ representation of time duration, time point, and clocks
+libboost-chrono1.65.1 - C++ representation of time duration, time point, and clocks
+libboost-date-time1.65-dev - set of date-time libraries based on generic programming concepts
+libboost-date-time1.65.1 - set of date-time libraries based on generic programming concepts
+libboost-dev - Boost C++ Libraries development files (default version)
+libboost-filesystem-dev - filesystem operations (portable paths, iteration over directories, etc) in C++ (default version)
+libboost-filesystem1.65-dev - filesystem operations (portable paths, iteration over directories, etc) in C++
+libboost-filesystem1.65.1 - filesystem operations (portable paths, iteration over directories, etc) in C++
+libboost-iostreams1.65.1 - Boost.Iostreams Library
+libboost-locale1.65.1 - C++ facilities for localization
+libboost-program-options-dev - program options library for C++ (default version)
+libboost-program-options1.65-dev - program options library for C++
+libboost-program-options1.65.1 - program options library for C++
+libboost-serialization1.65-dev - serialization library for C++
+libboost-serialization1.65.1 - serialization library for C++
+libboost-system-dev - Operating system (e.g. diagnostics support) library (default version)
+libboost-system1.65-dev - Operating system (e.g. diagnostics support) library
+libboost-system1.65.1 - Operating system (e.g. diagnostics support) library
+libboost-thread-dev - portable C++ multi-threading (default version)
+libboost-thread1.65-dev - portable C++ multi-threading
+libboost-thread1.65.1 - portable C++ multi-threading
+libboost1.65-dev - Boost C++ Libraries development files
+libboost1.65-tools-dev - Boost C++ Libraries development tools
+argagg-dev - Argument Aggregator - Simple C++11 command line argument parser
+argagg-dev-doc - Argument Aggregator - Simple C++11 command line argument parser - source doc
+autobahn-cpp-dev - WAMP in C++ for Boost/Asio - development headers
+autobahn-cpp-doc - WAMP in C++ for Boost/Asio - examples
+aws-shell - Interactive productivity booster for the AWS CLI
+ciso - Tool to convert Sony PSP iso to ciso
+ckon - automatic build tool for ROOT data analysis software
+dm-writeboost-dkms - log-structured caching for Linux
+fasd - command-line productivity booster
+gnome-alsamixer - ALSA sound mixer for GNOME
+i7z - reporting tool for i7, i5, i3 CPUs
+libasio-dev - cross-platform C++ library for network programming
+libasio-doc - documentation for asio C++ library for network programming
+libboost-all-dev - Boost C++ Libraries development files (ALL) (default version)
+libboost-atomic-dev - atomic data types, operations, and memory ordering constraints (default version)
+libboost-atomic1.62-dev - atomic data types, operations, and memory ordering constraints
+libboost-atomic1.62.0 - atomic data types, operations, and memory ordering constraints
+libboost-chrono-dev - C++ representation of time duration, time point, and clocks (default version)
+libboost-chrono1.62-dev - C++ representation of time duration, time point, and clocks
+libboost-chrono1.62.0 - C++ representation of time duration, time point, and clocks
+libboost-container-dev - C++ library that implements several well-known containers - dev files (default version)
+libboost-container1.65-dev - C++ library that implements several well-known containers - dev files
+libboost-container1.65.1 - C++ library that implements several well-known containers
+libboost-context-dev - provides a sort of cooperative multitasking on a single thread (default version)
+libboost-context1.62-dev - provides a sort of cooperative multitasking on a single thread
+libboost-context1.62.0 - provides a sort of cooperative multitasking on a single thread
+libboost-context1.65-dev - provides a sort of cooperative multitasking on a single thread
+libboost-context1.65.1 - provides a sort of cooperative multitasking on a single thread
+libboost-coroutine-dev - provides a sort of cooperative multitasking on a single thread (default version)
+libboost-coroutine1.62-dev - provides a sort of cooperative multitasking on a single thread
+libboost-coroutine1.62.0 - provides a sort of cooperative multitasking on a single thread
+libboost-coroutine1.65-dev - provides a sort of cooperative multitasking on a single thread
+libboost-coroutine1.65.1 - provides a sort of cooperative multitasking on a single thread
+libboost-date-time-dev - set of date-time libraries based on generic programming concepts (default version)
+libboost-date-time1.62-dev - set of date-time libraries based on generic programming concepts
+libboost-date-time1.62.0 - set of date-time libraries based on generic programming concepts
+libboost-doc - Boost.org libraries documentation placeholder (default version)
+libboost-exception-dev - library to help write exceptions and handlers (default version)
+libboost-exception1.62-dev - library to help write exceptions and handlers
+libboost-exception1.65-dev - library to help write exceptions and handlers
+libboost-fiber-dev - cooperatively-scheduled micro-/userland-threads (default version)
+libboost-fiber1.62-dev - cooperatively-scheduled micro-/userland-threads
+libboost-fiber1.62.0 - cooperatively-scheduled micro-/userland-threads
+libboost-fiber1.65-dev - cooperatively-scheduled micro-/userland-threads
+libboost-fiber1.65.1 - cooperatively-scheduled micro-/userland-threads
+libboost-filesystem1.62-dev - filesystem operations (portable paths, iteration over directories, etc) in C++
+libboost-filesystem1.62.0 - filesystem operations (portable paths, iteration over directories, etc) in C++
+libboost-geometry-utils-perl - Perl module providing bindings to the Boost Geometry library
+libboost-graph-dev - generic graph components and algorithms in C++ (default version)
+libboost-graph-parallel-dev - generic graph components and algorithms in C++ (default version)
+libboost-graph-parallel1.62-dev - generic graph components and algorithms in C++
+libboost-graph-parallel1.62.0 - generic graph components and algorithms in C++
+libboost-graph-parallel1.65-dev - generic graph components and algorithms in C++
+libboost-graph-parallel1.65.1 - generic graph components and algorithms in C++
+libboost-graph1.62-dev - generic graph components and algorithms in C++
+libboost-graph1.62.0 - generic graph components and algorithms in C++
+libboost-graph1.65-dev - generic graph components and algorithms in C++
+libboost-graph1.65.1 - generic graph components and algorithms in C++
+libboost-iostreams-dev - Boost.Iostreams Library development files (default version)
+libboost-iostreams1.62-dev - Boost.Iostreams Library development files
+libboost-iostreams1.62.0 - Boost.Iostreams Library
+libboost-iostreams1.65-dev - Boost.Iostreams Library development files
+libboost-locale-dev - C++ facilities for localization (default version)
+libboost-locale1.62-dev - C++ facilities for localization
+libboost-locale1.62.0 - C++ facilities for localization
+libboost-locale1.65-dev - C++ facilities for localization
+libboost-log-dev - C++ logging library (default version)
+libboost-log1.62-dev - C++ logging library
+libboost-log1.62.0 - C++ logging library
+libboost-log1.65-dev - C++ logging library
+libboost-log1.65.1 - C++ logging library
+libboost-math-dev - Boost.Math Library development files (default version)
+libboost-math1.62-dev - Boost.Math Library development files
+libboost-math1.62.0 - Boost.Math Library
+libboost-math1.65-dev - Boost.Math Library development files
+libboost-math1.65.1 - Boost.Math Library
+libboost-mpi-dev - C++ interface to the Message Passing Interface (MPI) (default version)
+libboost-mpi-python-dev - C++ interface to the Message Passing Interface (MPI), Python Bindings (default version)
+libboost-mpi-python1.62-dev - C++ interface to the Message Passing Interface (MPI), Python Bindings
+libboost-mpi-python1.62.0 - C++ interface to the Message Passing Interface (MPI), Python Bindings
+libboost-mpi-python1.65-dev - C++ interface to the Message Passing Interface (MPI), Python Bindings
+libboost-mpi-python1.65.1 - C++ interface to the Message Passing Interface (MPI), Python Bindings
+libboost-mpi1.62-dev - C++ interface to the Message Passing Interface (MPI)
+libboost-mpi1.62.0 - C++ interface to the Message Passing Interface (MPI)
+libboost-mpi1.65-dev - C++ interface to the Message Passing Interface (MPI)
+libboost-mpi1.65.1 - C++ interface to the Message Passing Interface (MPI)
+libboost-numpy-dev - Boost.Python NumPy extensions development files (default version)
+libboost-numpy1.65-dev - Boost.Python NumPy extensions development files
+libboost-numpy1.65.1 - Boost.Python NumPy extensions
+libboost-program-options1.62-dev - program options library for C++
+libboost-program-options1.62.0 - program options library for C++
+libboost-python-dev - Boost.Python Library development files (default version)
+libboost-python1.62-dev - Boost.Python Library development files
+libboost-python1.62.0 - Boost.Python Library
+libboost-python1.65-dev - Boost.Python Library development files
+libboost-python1.65.1 - Boost.Python Library
+libboost-random-dev - Boost Random Number Library (default version)
+libboost-random1.62-dev - Boost Random Number Library
+libboost-random1.62.0 - Boost Random Number Library
+libboost-random1.65-dev - Boost Random Number Library
+libboost-random1.65.1 - Boost Random Number Library
+libboost-regex-dev - regular expression library for C++ (default version)
+libboost-regex1.62-dev - regular expression library for C++
+libboost-regex1.62.0 - regular expression library for C++
+libboost-regex1.65-dev - regular expression library for C++
+libboost-regex1.65.1 - regular expression library for C++
+libboost-serialization-dev - serialization library for C++ (default version)
+libboost-serialization1.62-dev - serialization library for C++
+libboost-serialization1.62.0 - serialization library for C++
+libboost-signals-dev - managed signals and slots library for C++ (default version)
+libboost-signals1.62-dev - managed signals and slots library for C++
+libboost-signals1.62.0 - managed signals and slots library for C++
+libboost-signals1.65-dev - managed signals and slots library for C++
+libboost-signals1.65.1 - managed signals and slots library for C++
+libboost-stacktrace-dev - library to capture and print stack traces - development files (default version)
+libboost-stacktrace1.65-dev - library to capture and print stack traces - development files
+libboost-stacktrace1.65.1 - library to capture and print stack traces
+libboost-system1.62-dev - Operating system (e.g. diagnostics support) library
+libboost-system1.62.0 - Operating system (e.g. diagnostics support) library
+libboost-test-dev - components for writing and executing test suites (default version)
+libboost-test1.62-dev - components for writing and executing test suites
+libboost-test1.62.0 - components for writing and executing test suites
+libboost-test1.65-dev - components for writing and executing test suites
+libboost-test1.65.1 - components for writing and executing test suites
+libboost-thread1.62-dev - portable C++ multi-threading
+libboost-thread1.62.0 - portable C++ multi-threading
+libboost-timer-dev - C++ wall clock and CPU process timers (default version)
+libboost-timer1.62-dev - C++ wall clock and CPU process timers
+libboost-timer1.62.0 - C++ wall clock and CPU process timers
+libboost-timer1.65-dev - C++ wall clock and CPU process timers
+libboost-timer1.65.1 - C++ wall clock and CPU process timers
+libboost-tools-dev - Boost C++ Libraries development tools (default version)
+libboost-type-erasure-dev - C++ runtime polymorphism based on concepts (default version)
+libboost-type-erasure1.62-dev - C++ runtime polymorphism based on concepts
+libboost-type-erasure1.62.0 - C++ runtime polymorphism based on concepts
+libboost-type-erasure1.65-dev - C++ runtime polymorphism based on concepts
+libboost-type-erasure1.65.1 - C++ runtime polymorphism based on concepts
+libboost-wave-dev - C99/C++ preprocessor library (default version)
+libboost-wave1.62-dev - C99/C++ preprocessor library
+libboost-wave1.62.0 - C99/C++ preprocessor library
+libboost-wave1.65-dev - C99/C++ preprocessor library
+libboost-wave1.65.1 - C99/C++ preprocessor library
+libboost1.62-all-dev - Boost C++ Libraries development files (ALL)
+libboost1.62-dev - Boost C++ Libraries development files
+libboost1.62-doc - Boost.org libraries documentation
+libboost1.62-tools-dev - Boost C++ Libraries development tools
+libboost1.65-all-dev - Boost C++ Libraries development files (ALL)
+libboost1.65-doc - Boost.org libraries documentation placeholder
+libfmt-dev - fast type-safe C++ formatting library -- development files
+libfmt-doc - fast type-safe C++ formatting library -- documentation
+libghc-mutable-containers-dev - abstactions and concrete implementations of mutable containers
+libghc-mutable-containers-doc - abstactions and concrete implementations of mutable containers; documentation
+libghc-mutable-containers-prof - abstactions and concrete implementations of mutable containers; profiling libraries
+libmapbox-variant-dev - Alternative to boost::variant for C++11
+libmath-vector-real-xs-perl - Perl module for real vector arithmetic in fast XS
+libobject-realize-later-perl - Perl module providing delayed creation of objects
+libodb-boost-2.4 - Boost ODB runtime library
+libodb-boost-dev - Boost ODB runtime library (development)
+libpion-5.0 - lightweight HTTP interface library - runtime files
+libpion-dev - lightweight HTTP interface library - development files
+libpion-doc - lightweight HTTP interface library - documentation
+libpion-plugins - lightweight HTTP interface library - plugins
+librandom-numbers-dev - Robot OS random numbers library - development files
+librandom-numbers0d - Robot OS random numbers library
+libref-util-xs-perl - XS implementation for Ref::Util
+libsnp-sites1-dev - Static libraries and header files for the package snp-sites
+libtorch3-dev - State of the art machine learning library - development files
+libtorch3c2 - State of the art machine learning library - runtime library
+libtype-tiny-xs-perl - boost for some of Type::Tiny's built-in type constraints
+libvolk1-bin - vector optimized runtime tools
+libvolk1-dev - vector optimized function headers
+libvolk1.3 - vector optimized functions
+libwebsocketpp-dev - C++/Boost Asio based websocket client/server library. Dev package
+libwebsocketpp-doc - C++/Boost Asio based websocket client/server library. Doc package
+node-aws-sign2 - AWS signing in JavaScript
+pianobooster - learn the piano just by playing a game
+pianobooster-dbg - learn the piano just by playing a game - debug
+pybind11-dev - seamless operability between C++11 and Python
+pybind11-doc - documentation for pybind11
+python-falcon - supersonic micro-framework for building cloud APIs - Python 2.x
+python-minieigen - Wrapper of parts of the Eigen library (Python 2)
+python-pgmagick - Yet Another Python wrapper for GraphicsMagick
+python-pybind11 - pybind11 helper module for Python 2
+python-pykaraoke - free CDG/MIDI/MPEG karaoke player
+python-rosboost-cfg - Contains scripts used by the Robot OS rosboost-cfg tool
+python-socketio - Socket.IO server based on the gevent pywsgi server
+python-socketio-doc - documentation for gevent-socketio
+python3-falcon - supersonic micro-framework for building cloud APIs - Python 3.x
+python3-minieigen - Wrapper of parts of the Eigen library (Python 3)
+python3-pgmagick - Yet Another Python wrapper for GraphicsMagick
+python3-pybind11 - pybind11 helper module for Python 3
+r-bioc-rbgl - R interface to the graph algorithms contained in the BOOST library
+r-cran-catools - GNU R package providing various utility functions
+r-cran-gbm - GNU R package providing Generalized Boosted Regression Models
+rapidjson-dev - fast JSON parser/generator for C++ with SAX/DOM style API
+redeclipse - free, casual arena shooter
+spamassassin-heatu - Heuristic Email Address Tracker Utility for Spamassassin
+stella - Atari 2600 Emulator for SDL & the X Window System
+weka - Machine learning algorithms for data mining tasks
+weka-doc - documentation for the Weka machine learning suite
+writeboost - utility to manage mappings of dm-writeboost devices

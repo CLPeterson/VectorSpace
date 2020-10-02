@@ -1,0 +1,30 @@
+CC=g++
+CCFLAGS=-g -ltbb -std=c++11 -pthread
+
+EMBB_INCLUDE=/path/to/embb/include
+EMBB_BUILD=/path/to/build
+
+TBB_INCLUDE=/path/to/tbb/include
+TBB_LIB=/path/to/tbb/lib
+
+export DYLD_LIBRARY_PATH=${EMBB_LIB}:${TBB_LIB}
+export LD_LIBRARY_PATH=${EMBB_LIB}:${TBB_LIB}
+
+etcd-test:
+	${CC} ${CCFLAGS} -D_ENABLE_ETCD_ -lpthread lt.cc -o lt-etcd-test
+#	./lt-etcd-test
+
+hashset-test:
+	${CC} ${CCFLAGS} -D_ENABLE_HASHSET_ -lpthread lt.cc -o lt-hashset-test
+#	./lt-hashset-test
+
+tbb-test:
+	${CC} ${CCFLAGS} -D_ENABLE_TBB_ -L${TBB_LIB} -I${TBB_INCLUDE} -lpthread -ltbb lt.cc -o lt-tbb-test
+#	./lt-tbb-test
+
+embb-test:
+	${CC} ${CCFLAGS} -D_ENABLE_EMBB_ -I${EMBB_INCLUDE} -lpthread -lrt lt.cc -o lt-embb-test ${EMBB_BUILD}/base_cpp/libembb_base_cpp.a ${EMBB_BUILD}/base_c/libembb_base_c.a ${EMBB_BUILD}/containers_cpp/libembb_containers_cpp.a
+#	./lt-embb-test
+
+stack-test:
+	${CC} ${CCFLAGS} -D_ENABLE_STACK_ -lpthread lt.cc -o lt-stack-test

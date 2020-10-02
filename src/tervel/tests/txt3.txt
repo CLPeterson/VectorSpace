@@ -1,0 +1,11 @@
+libbtbb-dev - Bluetooth baseband decoding library - development files
+libbtbb1 - Bluetooth baseband decoding library
+libtbb-dev - parallelism library for C++ - development files
+libtbb-doc - parallelism library for C++ - documentation
+libtbb2 - parallelism library for C++ - runtime files
+libtbb2-dbg - parallelism library for C++ - debugging symbols
+python-libbtbb-pcapdump - pcapdump is a Python module for pcap delivered by libbtbb
+ros-cmake-modules - Robot OS CMake Modules
+tbb-examples - parallelism library for C++ - example files
+torbrowser-launcher - helps download and run the Tor Browser Bundle
+libthrust-dev - Thrust - Parallel Algorithms Library
