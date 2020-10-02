@@ -33,10 +33,15 @@
 unsigned int TEST_SIZE;
 
 //Set one parameter to 1 and the rest 0
-#define LINEARIZABILITY 1
-#define SEQUENTIAL_CONSISTENCY 0
-#define QUIESCENT_CONSISTENCY 0
-#define QUASI_LINEARIZABILITY 0
+//#define LINEARIZABILITY 1
+//#define SEQUENTIAL_CONSISTENCY 0
+//#define QUIESCENT_CONSISTENCY 0
+//#define QUASI_LINEARIZABILITY 0
+
+unsigned int LINEARIZABILITY;
+unsigned int SEQUENTIAL_CONSISTENCY;
+unsigned int QUIESCENT_CONSISTENCY;
+unsigned int QUASI_LINEARIZABILITY;
 
 #define K 2
 #define num_segments 5
@@ -1014,10 +1019,10 @@ void verify_checkpoint(std::map<long int,Method,bool(*)(long int,long int)>& map
 			if(vec_verify->sum < 0)
 			{
 				outcome = false;
-#if DEBUG_
+//#if DEBUG_
 				//printf("WARNING: Item %d, sum %.2lf\n", it_verify->second.key, it_verify->second.sum);
-				printf("WARNING: Item %d, sum %.2lf\n", vec_verify->key, vec_verify->sum);
-#endif
+				printf("WARNING: Item %d, Incorrect CONSUME, sum %.2lf\n", vec_verify->key, vec_verify->sum);
+//#endif
 			}
 			//printf("Item %d, sum %.2lf\n", it_verify->second.key, it_verify->second.sum);
 
@@ -1025,10 +1030,10 @@ void verify_checkpoint(std::map<long int,Method,bool(*)(long int,long int)>& map
 			if((ceil(vec_verify->sum) + vec_verify->sum_r) < 0)
 			{
 				outcome = false;
-#if DEBUG_
+//#if DEBUG_
 				//printf("WARNING: Item %d, sum_r %.2lf\n", it_verify->second.key, it_verify->second.sum_r);
-				printf("WARNING: Item %d, sum_r %.2lf\n", vec_verify->key, vec_verify->sum_r);
-#endif
+				printf("WARNING: Item %d, Incorrect READ, sum_r %.2lf\n", vec_verify->key, vec_verify->sum_r);
+//#endif
 			}
 
 			int N;
@@ -1042,10 +1047,10 @@ void verify_checkpoint(std::map<long int,Method,bool(*)(long int,long int)>& map
 			if(((ceil(vec_verify->sum) + vec_verify->sum_f) * N) < 0)
 			{
 				outcome = false;
-#if DEBUG_
+//#if DEBUG_
 				//printf("WARNING: Item %d, sum_f %.2lf\n", it_verify->second.key, it_verify->second.sum_f);
-				printf("WARNING: Item %d, sum_f %.2lf\n", vec_verify->key, vec_verify->sum_f);
-#endif
+				printf("WARNING: Item %d, Incorrect FAIL, sum_f %.2lf\n", vec_verify->key, vec_verify->sum_f);
+//#endif
 			}
 		}
 		if(outcome == true)
@@ -1762,14 +1767,29 @@ int main(int argc,char* argv[])
 	TERVEL_STACK = 0;
 	TBB_MAP = 0;
 	TERVEL_MAP = 0;
-	if( argc == 2 ) {
-		printf("Test size = %d\n", atoi(argv[1]));
-		TEST_SIZE = (unsigned int) atoi(argv[1]);
+
+	TEST_SIZE = 10;
+
+	LINEARIZABILITY = 0;
+	SEQUENTIAL_CONSISTENCY = 0;
+	QUIESCENT_CONSISTENCY = 0;
+	QUASI_LINEARIZABILITY = 0;
+
+	if( argc <= 2 ) { //default
 		TBB_QUEUE = 1;
 		printf("Testing TBB_QUEUE\n");
-	} else if (argc == 3) {
-		printf("Test size = %d\n", atoi(argv[1]));
+	}
+	if( argc <= 3 ) { //default
+		LINEARIZABILITY = 1;
+		printf("Checking LINEARIZABILITY\n");
+	}
+
+	if( argc > 1 ) {
 		TEST_SIZE = (unsigned int) atoi(argv[1]);
+	} 
+
+	if (argc > 2) {
+
 		if(atoi(argv[2]) == 0)
 		{
 			TBB_QUEUE = 1;
@@ -1795,13 +1815,31 @@ int main(int argc,char* argv[])
 			TERVEL_MAP = 1;
 			printf("Testing TERVEL_MAP\n");
 		}
-		
-	} else { //default
-		printf("Test size = 10\n");
-		TEST_SIZE = 10;
-		TBB_QUEUE = 1;
-		printf("Testing TBB_QUEUE\n");
+	} 
+
+	if (argc > 3) {
+		if(atoi(argv[3]) == 0)
+		{
+			LINEARIZABILITY = 1;
+			printf("Checking LINEARIZABILITY\n");
+		} else if (atoi(argv[3]) == 1)
+		{
+			SEQUENTIAL_CONSISTENCY = 1;
+			printf("Checking SEQUENTIAL_CONSISTENCY\n");
+		} else if (atoi(argv[3]) == 2)
+		{
+			QUIESCENT_CONSISTENCY = 1;
+			printf("Checking QUIESCENT_CONSISTENCY\n");
+		} else if (atoi(argv[3]) == 3)
+		{
+			QUASI_LINEARIZABILITY = 1;
+			printf("Checking QUASI_LINEARIZABILITY\n");
+		}
+
 	}
+
+	printf("Test size = %d\n", TEST_SIZE);
+	printf("Number of Threads = %d\n", NUM_THRDS);
 
 
 	if(TERVEL_STACK || TERVEL_MAP)
