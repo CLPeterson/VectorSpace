@@ -4885,10 +4885,10 @@ static void stack_experiment(bool is_linearizable)
 
   constexpr std::chrono::hours max_duration{1};
   constexpr std::size_t N = 560000U;
-  //constexpr unsigned number_of_threads = 4U;
   constexpr unsigned number_of_threads = 32U;
   //constexpr WorkerConfiguration worker_configuration = {'\24', 70000U};
-  constexpr WorkerConfiguration worker_configuration = {'\24', 300U};
+  //constexpr WorkerConfiguration worker_configuration = {'\24', 300U};
+  constexpr WorkerConfiguration worker_configuration = {'\24', 100U};
   constexpr unsigned log_size = number_of_threads * worker_configuration.number_of_ops;
 
   std::cout << "stack_experiment : " << (is_linearizable ? "" : "not ") << "linearizable" << std::endl;
