@@ -22,6 +22,7 @@ For example, to test TERVEL\_STACK with test size 100 for "QUIESCENT\_CONSISTENC
 
 ## Interpretation:
 If the execution is correct, the tool will print "Program Correct Up To This Point". If a correctness violation is detected, the tool will print "Program Not Correct", and a warning will print that indicates the detected error. <br />
+WARNINGS: <br />
 Incorrect CONSUME: An item was consumed that doesn't exist in the data structure. <br />
 Incorrect READ: An item was read that doesn't exist in the data structure. <br />
 Incorrect FAIL: A method call failed to consume an item that exists in the data structure. <br />
