@@ -33,7 +33,7 @@ To reproduce results in experiments: <br />
 `make` <br />
 `./script` <br />
 
-# Concurrent Correctness in Vector Space:
+# P-Compositionality:
 ## Build:
 `cd RelatedWork/P-Compositionality/linearizability-checker` <br />
 `make stack-test` <br />
