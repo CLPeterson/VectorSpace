@@ -1,11 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string>
+#include <chrono>
 
 FILE *pfile;
 
 int main(int argc,char* argv[]) 
 { 
+    auto start = std::chrono::high_resolution_clock::now();
+
 	system("[ -f ../output.txt ] && rm ../output.txt");
 	system("[ -f output.txt ] && rm output.txt");
 
@@ -16,7 +19,8 @@ int main(int argc,char* argv[])
 	std::string data_structure;
 	std::string condition;
 	
-	for(unsigned int k = 0; k < 4; k++)
+	//for(unsigned int k = 0; k < 4; k++)
+	for(unsigned int k = 0; k < 1; k++)
 	{	
 		condition.clear();
 		if (k == 0)
@@ -86,7 +90,13 @@ int main(int argc,char* argv[])
 			fclose(pfile);
 
 		}
-	}	
+	}
+	
+	auto end = std::chrono::high_resolution_clock::now();
+	auto elapsed_time = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start);
+	double elapsed_time_double = elapsed_time.count()*0.000000001;
+
+	printf("Duration = %.7f seconds\n", elapsed_time_double);	
 
 	return 0; 
 }

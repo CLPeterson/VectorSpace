@@ -4888,7 +4888,7 @@ static void stack_experiment(bool is_linearizable)
   constexpr unsigned number_of_threads = 32U;
   //constexpr WorkerConfiguration worker_configuration = {'\24', 70000U};
   //constexpr WorkerConfiguration worker_configuration = {'\24', 300U};
-  constexpr WorkerConfiguration worker_configuration = {'\24', 100U};
+  constexpr WorkerConfiguration worker_configuration = {'\24', 10U};
   constexpr unsigned log_size = number_of_threads * worker_configuration.number_of_ops;
 
   std::cout << "stack_experiment : " << (is_linearizable ? "" : "not ") << "linearizable" << std::endl;
@@ -4920,6 +4920,7 @@ static void stack_experiment(bool is_linearizable)
   auto elapsed_time = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start);
   double elapsed_time_double;
 
+	/*
   //start = std::chrono::system_clock::now();
   start = std::chrono::high_resolution_clock::now();
   {
@@ -4942,7 +4943,7 @@ static void stack_experiment(bool is_linearizable)
             << elapsed_time_double << " s "
             << mem_usage(result) << std::endl;
 
-  fprintf(pFile, "%.15lf\n", elapsed_time_double);
+  //fprintf(pFile, "%.15lf\n", elapsed_time_double);
 
   //start = std::chrono::system_clock::now();
   start = std::chrono::high_resolution_clock::now();
@@ -4966,7 +4967,8 @@ static void stack_experiment(bool is_linearizable)
             << elapsed_time_double << " s "
             << mem_usage(result) << std::endl;
 
-  fprintf(pFile, "%.15lf\n", elapsed_time_double);
+  //fprintf(pFile, "%.15lf\n", elapsed_time_double);
+  */
 
   const unsigned number_of_partitions{N};
 
@@ -4977,7 +4979,7 @@ static void stack_experiment(bool is_linearizable)
     assert(log_copy.number_of_entries() == number_of_entries);
 
     compositional_check(log_copy, result, number_of_partitions, max_duration);
-    assert(result.is_timeout() or result.is_linearizable() == is_linearizable);
+    //assert(result.is_timeout() or result.is_linearizable() == is_linearizable);
   }
   //end = std::chrono::system_clock::now();
   end = std::chrono::high_resolution_clock::now();
