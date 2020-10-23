@@ -7,8 +7,8 @@ Install dependencies: <br />
 Alternatively, install dependencies using Debian package management system: <br />
 `cd dependencies` <br />
 `sudo dpkg -i libtbb-dev_2020.1-2_amd64.deb` <br />
-`sudo dpkg -i libboost-all-dev_1.71.0.0ubuntu2_amd64.deb` <br />
 `sudo dpkg -i libgflags-dev_2.2.2-1build1_amd64.deb` <br />
+`sudo dpkg -i libboost-all-dev_1.71.0.0ubuntu2_amd64.deb` <br />
 
 Build tests: <br />
 `cd src/tervel/tests` <br />
