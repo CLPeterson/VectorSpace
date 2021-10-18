@@ -28,7 +28,11 @@
 #include "datastructures/unboundedsize_kfifo.h"
 #include "datastructures/boundedsize_kfifo.h"
 
-#define NUM_THRDS 32
+#include "datastructures/QStack/qstack.h"
+#include "datastructures/QQueue/qqueue.h"
+
+//#define NUM_THRDS 32
+#define NUM_THRDS 4
 //#define TEST_SIZE 100
 unsigned int TEST_SIZE;
 
@@ -62,6 +66,10 @@ unsigned int BOOST_STACK;
 unsigned int TERVEL_STACK;
 unsigned int TBB_MAP;
 unsigned int TERVEL_MAP;
+unsigned int QSTACK;
+unsigned int QQUEUE;
+
+double *promote_array;
 
 struct MyHashCompare {
     static size_t hash( int x ) {
@@ -267,14 +275,30 @@ typedef struct Item
 	
 	void demote()
 	{
+		double old_sum = sum;
 		exponent = exponent + 1;
 		long int den = (long int) pow (2, exponent);
 		//printf("denominator = %ld\n", den);
 		sub_frac(1, den);
+
+		/*FILE *promotefile = fopen("promote.txt", "a");
+
+		for (int i = 0; i < TEST_SIZE*NUM_THRDS+1; i++)
+		{
+			if(i != key)
+				fprintf(promotefile, "0 ");
+			else
+				fprintf(promotefile, "%.5f ", sum - old_sum);
+		}
+		fprintf(promotefile, "\n");
+		fclose(promotefile);*/
+		if(key != INT_MIN)
+			promote_array[key] += sum - old_sum;
 	}
 
 	void promote()
 	{
+		double old_sum = sum;
 		long int den = (long int) pow (2, exponent);
 #if DEBUG_
 		if(den == 0)
@@ -285,6 +309,20 @@ typedef struct Item
 		//printf("denominator = %ld\n", den);
 		add_frac(1, den);
 		exponent = exponent - 1;
+
+		/*FILE *promotefile = fopen("promote.txt", "a");
+
+		for (int i = 0; i < TEST_SIZE*NUM_THRDS+1; i++)
+		{
+			if(i != key)
+				fprintf(promotefile, "0 ");
+			else
+				fprintf(promotefile, "%.5f ", sum - old_sum);
+		}
+		fprintf(promotefile, "\n");
+		fclose(promotefile);*/
+		if(key != INT_MIN)
+			promote_array[key] += sum - old_sum;
 	}
 
 	//Failed Consumer
@@ -387,18 +425,49 @@ typedef struct Item
 
 	void demote_r()
 	{
+		double old_sum = sum;
 		exponent_r = exponent_r + 1;
 		long int den = (long int) pow (2, exponent_r);
 		//printf("denominator = %ld\n", den);
 		sub_frac_r(1, den);
+
+		/*FILE *promotefile = fopen("promote.txt", "a");
+
+		for (int i = 0; i < TEST_SIZE*NUM_THRDS+1; i++)
+		{
+			if(i != key)
+				fprintf(promotefile, "0 ");
+			else
+				fprintf(promotefile, "%.5f ", sum - old_sum);
+		}
+		fprintf(promotefile, "\n");
+		fclose(promotefile);*/
+		if(key != INT_MIN)
+			promote_array[key] += sum - old_sum;
 	}
 
 	void promote_r()
 	{
+		double old_sum = sum;
 		long int den = (long int) pow (2, exponent_r);
 		//printf("denominator = %ld\n", den);
 		add_frac_r(1, den);
 		exponent_r = exponent_r - 1;
+
+		/*FILE *promotefile = fopen("promote.txt", "a");
+
+		for (int i = 0; i < TEST_SIZE*NUM_THRDS+1; i++)
+		{
+			if(i != key)
+				fprintf(promotefile, "0 ");
+			else
+				fprintf(promotefile, "%.5f ", sum - old_sum);
+		}
+		fprintf(promotefile, "\n");
+		fclose(promotefile);*/
+
+		if(key != INT_MIN)
+			promote_array[key] += sum - old_sum;
 	}	
 }Item;
 
@@ -436,6 +505,9 @@ bool fncomp (long int lhs, long int rhs) {return lhs < rhs;}
 tbb::concurrent_queue<int> queue;
 boost::lockfree::stack<int> stack(128);
 tbb::concurrent_hash_map<int,int,MyHashCompare> map;
+
+QStack<int> *qstack;
+QQueue<int> *qqueue;
 
 tervel::containers::lf::Stack<int> stack_tv;
 tervel::containers::wf::HashMap<long int, long int> map_tv(32768, 5);
@@ -686,6 +758,7 @@ void verify_checkpoint(std::map<long int,Method,bool(*)(long int,long int)>& map
 			//it_item = map_items.find(it->second.item_key);
 			//(it_item->second).sum = (it_item->second).sum - 1;
 
+			//printf("item_key = %d\n", it->second.item_key);
 			if(it->second.item_key != INT_MIN && vector_items[it->second.item_key] == NULL)
 			{
 				Item* item = new Item(it->second.item_key);
@@ -779,6 +852,8 @@ void verify_checkpoint(std::map<long int,Method,bool(*)(long int,long int)>& map
 								//it_item_0->second.promote_items.push(it_item->second.key);
 								//it_item->second.demote();
 								//it_item->second.demote_methods.push_back(it_0->second);
+
+								//printf("Item %d (response = %ld) happens before Item %d (invocation = %ld\n", it_0->second.item_key, it_0->second.response, it->second.item_key, it->second.invocation);
 								
 								vec_item_0->promote_items.push(vec_item->key);
 								vec_item->demote();
@@ -1007,14 +1082,30 @@ void verify_checkpoint(std::map<long int,Method,bool(*)(long int,long int)>& map
 
 		Item* vec_verify;
 
+		FILE *sumfile = fopen("sum.txt", "w");
+		FILE *promotefile = fopen("promote.txt", "w");
+
 		bool outcome = true;
 		//for (it_verify = map_items.begin(); it_verify!=map_items.end(); ++it_verify)
-		for (int i = 0; i < TEST_SIZE*NUM_THRDS+1; i++)
+		for (unsigned int i = 0; i < TEST_SIZE*NUM_THRDS+1; i++)
 		{
 			vec_verify = vector_items[i];
 			//if(it_verify->second.sum < 0)
 
-			if(vec_verify == NULL) continue;
+			//if(vec_verify == NULL) continue;
+			if(vec_verify == NULL) {
+				//fprintf(sumfile, "0 ");
+				fprintf(sumfile, "0.00 0\n");
+				fprintf(promotefile, "0.00 0\n");
+				continue;
+			}
+
+			//fprintf(sumfile, "%.5f ", vec_verify->sum);
+			if(i < TEST_SIZE*NUM_THRDS+1)
+			{
+				fprintf(sumfile, "%.5f 0\n", vec_verify->sum);
+				fprintf(promotefile, "%.5f 0\n", promote_array[i]);
+			}
 
 			if(vec_verify->sum < 0)
 			{
@@ -1053,6 +1144,9 @@ void verify_checkpoint(std::map<long int,Method,bool(*)(long int,long int)>& map
 //#endif
 			}
 		}
+		//fprintf(sumfile, "\n");
+		fclose(sumfile);
+		fclose(promotefile);
 		if(outcome == true)
 		{
 			final_outcome = true;
@@ -1153,18 +1247,28 @@ if (KFIFO_QUEUE) {
 		//if(op_dist <= 33)
 		{
 			type = CONSUMER;
-			int item_pop;
+			int item_pop = -1;
 			long unsigned int* item_pop_ptr;
 if (TBB_QUEUE) {
 			res = queue.try_pop (item_pop);
 } else if (KFIFO_QUEUE) {
 			item_pop_ptr = (long unsigned int*) malloc (sizeof(long unsigned int));
 			res = queue_kfifo->dequeue(item_pop_ptr);
+} else if (QQUEUE) {
+			res =  qqueue->dequeue(id, i, item_pop);
+			if(res)
+				printf("Tid %d: Dequeue %d\n", id, item_pop);
+			else
+				printf("Tid %d: Dequeue is an enqueue\n", id);
+			if(item_pop == INT_MIN)
+				res = false;
+				
 }
 			if(res)
 			{
-if (TBB_QUEUE) {
+if (TBB_QUEUE || QQUEUE) {
 				item_key = item_pop;
+				//printf("item_pop = %d\n", item_pop);
 } else if (KFIFO_QUEUE) {
 				item_key = (int) *item_pop_ptr;
 }
@@ -1178,44 +1282,78 @@ if (TBB_QUEUE) {
 			queue.push(item_key);
 } else if (KFIFO_QUEUE) {
 			res = queue_kfifo->enqueue((long unsigned int) item_key);
+} else if (QQUEUE) {
+			res = qqueue->enqueue(id, i, item_key);
+			if(res)
+				printf("Tid %d: Enqueue %d\n", id, item_key);
+			else
+				printf("Tid %d: Enqueue is a dequeue, key = %d\n", id, item_key);
+
+			if(!res) { //Enqueue is a dequeue
+				end = std::chrono::high_resolution_clock::now();
+				auto post_function = std::chrono::time_point_cast<std::chrono::nanoseconds>(end);
+				auto post_function_epoch = post_function.time_since_epoch();
+				long int response = post_function_epoch.count() - start_time_epoch.count();
+				
+				Method m1(m_id, id, item_key, INT_MIN, FIFO, PRODUCER, invocation, response, true);	
+				m_id = m_id + NUM_THRDS;			
+				thrd_lists[id].push_back(m1);		
+				thrd_lists_size[id].fetch_add(1);
+
+
+				end = std::chrono::high_resolution_clock::now();
+				post_function = std::chrono::time_point_cast<std::chrono::nanoseconds>(end);
+				post_function_epoch = post_function.time_since_epoch();
+				response = post_function_epoch.count() - start_time_epoch.count();
+
+				Method m2(m_id, id, item_key, INT_MIN, FIFO, CONSUMER, invocation, response, true);		
+				m_id = m_id + NUM_THRDS;		
+				thrd_lists[id].push_back(m2);		
+				thrd_lists_size[id].fetch_add(1);	
+			}
 }
 		}
 				
-		end = std::chrono::high_resolution_clock::now();
+		if(!(QQUEUE && !res))
+		{
 
-		auto post_function = std::chrono::time_point_cast<std::chrono::nanoseconds>(end);
-		auto post_function_epoch = post_function.time_since_epoch();
-		
-		//printf("Thread %d, item %d: prefunction = %ld, postfunction = %ld\n", id, item_key, pre_function_epoch.count(), post_function_epoch.count());
+			end = std::chrono::high_resolution_clock::now();
 
-		//auto response =
-		//std::chrono::duration_cast<std::chrono::nanoseconds>(end - start);
+			auto post_function = std::chrono::time_point_cast<std::chrono::nanoseconds>(end);
+			auto post_function_epoch = post_function.time_since_epoch();
+			
+			//printf("Thread %d, item %d: prefunction = %ld, postfunction = %ld\n", id, item_key, pre_function_epoch.count(), post_function_epoch.count());
 
-		long int response = post_function_epoch.count() - start_time_epoch.count();
+			//auto response =
+			//std::chrono::duration_cast<std::chrono::nanoseconds>(end - start);
 
-		//printf("Thread %d response: %ld nanoseconds\n", id, response.count());
-		
-		/*Method m1;
-		m1.id = m_id;
-		m1.process = id;
+			long int response = post_function_epoch.count() - start_time_epoch.count();
 
-		m1.item_key = item_key;
-		m1.type = type;
-		m1.semantics = FIFO;
-		m1.invocation = invocation.count();
-		m1.response = response.count();*/
+			//printf("Thread %d response: %ld nanoseconds\n", id, response.count());
+			
+			/*Method m1;
+			m1.id = m_id;
+			m1.process = id;
 
-		//Method m1(m_id, id, item_key, FIFO, type, invocation.count(), response.count(), res);
-		Method m1(m_id, id, item_key, INT_MIN, FIFO, type, invocation, response, res);
-		
-		m_id = m_id + NUM_THRDS;
-		
-		thrd_lists[id].push_back(m1);
-		
-		thrd_lists_size[id].fetch_add(1);
-		
-		//method_time[id] = method_time[id] + (response.count() - invocation.count());
-		method_time[id] = method_time[id] + (response - invocation);
+			m1.item_key = item_key;
+			m1.type = type;
+			m1.semantics = FIFO;
+			m1.invocation = invocation.count();
+			m1.response = response.count();*/
+			
+			//Method m1(m_id, id, item_key, FIFO, type, invocation.count(), response.count(), res);
+
+			Method m1(m_id, id, item_key, INT_MIN, FIFO, type, invocation, response, res);
+			
+			m_id = m_id + NUM_THRDS;
+			
+			thrd_lists[id].push_back(m1);
+			
+			thrd_lists_size[id].fetch_add(1);
+
+			//method_time[id] = method_time[id] + (response.count() - invocation.count());
+			method_time[id] = method_time[id] + (response - invocation);
+		}
 		
 	}
 	
@@ -1294,11 +1432,15 @@ if (BOOST_STACK) {
 			res = stack.pop (item_pop);
 } else if (TERVEL_STACK) {
 			res = stack_tv.pop(item_pop);
+} else if (QSTACK) {
+			res = qstack->pop(id, i, item_pop); 
 }
 			if(res)
 				item_key = item_pop;
 			else
 				item_key = INT_MIN;
+
+			printf("Thread %d: Pop %d\n", id, item_key);
 			
 		} else {
 			type = PRODUCER;
@@ -1307,7 +1449,10 @@ if (BOOST_STACK) {
 			stack.push(item_key);
 } else if (TERVEL_STACK) {
 			stack_tv.push(item_key);
+} else if (QSTACK) {
+			qstack->push(id, i, item_key);
 }
+			printf("Thread %d: Push %d\n", id, item_key);
 		}
 				
 		end = std::chrono::high_resolution_clock::now();
@@ -1577,6 +1722,8 @@ void verify()
 
 	long int old_min;
 
+	FILE *methodfile;
+
 #if QUIESCENT_CONSISTENCY
 	long int earliest_response;
 #endif
@@ -1608,6 +1755,37 @@ void verify()
 				}
 				
 				Method m = *it[i];
+
+				methodfile = fopen("method.txt", "a");
+
+				for(int j = 0; j < TEST_SIZE*NUM_THRDS+1; j++)
+				{
+					if(m.item_key == j)
+					{
+						switch(m.type)
+						{
+							case PRODUCER:
+							fprintf(methodfile, "1 ");
+							break;
+							case CONSUMER:
+							fprintf(methodfile, "-1 ");
+							break;
+							case READER:
+							fprintf(methodfile, "-0.5 ");
+							break;
+							deafult:
+							fprintf(methodfile, "0 ");
+						}
+					} else {
+						fprintf(methodfile, "0 ");
+					}	
+					if(j ==	TEST_SIZE*NUM_THRDS)
+					{
+						fprintf(methodfile, "\n");
+					}
+				}
+
+				fclose(methodfile);
 
 				//if(m.item_key%500 == 0)
 					//printf("Checking method %d\n", m.item_key);
@@ -1757,6 +1935,10 @@ void verify()
 
 int main(int argc,char* argv[]) 
 { 
+	system("[ -f method.txt ] && rm method.txt");
+	system("[ -f sum.txt ] && rm sum.txt");
+	system("[ -f promote.txt ] && rm promote.txt");
+
 	pfile = fopen("output.txt", "a");
 
 	method_count = 0;
@@ -1767,6 +1949,8 @@ int main(int argc,char* argv[])
 	TERVEL_STACK = 0;
 	TBB_MAP = 0;
 	TERVEL_MAP = 0;
+	QSTACK = 0;
+	QQUEUE = 0;
 
 	TEST_SIZE = 10;
 
@@ -1815,6 +1999,15 @@ int main(int argc,char* argv[])
 			TERVEL_MAP = 1;
 			printf("Testing TERVEL_MAP\n");
 		}
+		else if(atoi(argv[2]) == 6)
+		{
+			QSTACK = 1;
+			printf("Testing QSTACK\n");
+		} else if(atoi(argv[2]) == 7)
+		{
+			QQUEUE = 1;
+			printf("Testing QQUEUE\n");
+		}
 	} 
 
 	if (argc > 3) {
@@ -1841,14 +2034,26 @@ int main(int argc,char* argv[])
 	printf("Test size = %d\n", TEST_SIZE);
 	printf("Number of Threads = %d\n", NUM_THRDS);
 
+	promote_array = (double*) malloc((TEST_SIZE*NUM_THRDS+1)*sizeof(double));
 
-	if(TERVEL_STACK || TERVEL_MAP)
-	{
-		tervel_obj = new tervel::Tervel(NUM_THRDS+1);
-		tervel::ThreadContext* thread_context __attribute__((unused)); 
-		thread_context = new tervel::ThreadContext(tervel_obj);
-		//map_tv = new tervel::containers::wf::HashMap<long int, long int>(32768, 5);
-	}
+
+if(TERVEL_STACK || TERVEL_MAP)
+{
+	tervel_obj = new tervel::Tervel(NUM_THRDS+1);
+	tervel::ThreadContext* thread_context __attribute__((unused)); 
+	thread_context = new tervel::ThreadContext(tervel_obj);
+	//map_tv = new tervel::containers::wf::HashMap<long int, long int>(32768, 5);
+}
+
+if(QSTACK)
+{
+	qstack = new QStack<int>(NUM_THRDS, TEST_SIZE);
+}
+
+if(QQUEUE)
+{
+	qqueue = new QQueue<int>(NUM_THRDS, TEST_SIZE);
+}
 
 if (KFIFO_QUEUE) {
 	tlsize = scal::HumanSizeToPages(s1.c_str(), s1.size());
@@ -1870,10 +2075,10 @@ if (KFIFO_QUEUE) {
 
 	for(int i = 0; i < NUM_THRDS; i++)
 	{
-		if(TBB_QUEUE || KFIFO_QUEUE)
+		if(TBB_QUEUE || KFIFO_QUEUE || QQUEUE)
 		{
 			t[i] = std::thread(work_queue,i);
-		} else if(BOOST_STACK || TERVEL_STACK)
+		} else if(BOOST_STACK || TERVEL_STACK || QSTACK)
 		{
 			t[i] = std::thread(work_stack,i);
 		} else if(TBB_MAP || TERVEL_MAP)
@@ -1984,6 +2189,65 @@ if (TBB_QUEUE) {
 		} 
 	}
 	printf("\n");
+} else if (QSTACK) {
+	FILE *statefile = fopen("state.txt", "w");
+	printf("Final QStack Configuration:\n");
+	int qstack_val;
+	bool flag = false;
+	while(qstack->pop(0, 0, qstack_val)) 
+	{
+		flag = true;
+		printf("%d ", qstack_val);
+		fprintf(statefile, "%d ", qstack_val);
+	}
+	if(flag == false) fprintf(statefile, "-999 ");
+	printf("\n");
+	fprintf(statefile, "\n");
+} else if (QQUEUE) {
+	FILE *statefile = fopen("state.txt", "w");
+	printf("Final QQueue Configuration:\n");
+	int qqueue_val;
+	bool flag = false;
+	while(qqueue->dequeue(0, 0, qqueue_val)) 
+	{
+		if(qqueue_val != INT_MIN)
+		{
+			flag = true;
+			printf("%d ", qqueue_val);
+			fprintf(statefile, "%d ", qqueue_val);
+		}
+			
+	}
+	while(qqueue->dequeue(1, 0, qqueue_val)) 
+	{
+		if(qqueue_val != INT_MIN)
+		{
+			flag = true;
+			printf("%d ", qqueue_val);
+			fprintf(statefile, "%d ", qqueue_val);
+		}
+	}
+	while(qqueue->dequeue(2, 0, qqueue_val)) 
+	{
+		if(qqueue_val != INT_MIN)
+		{
+			flag = true;
+			printf("%d ", qqueue_val);
+			fprintf(statefile, "%d ", qqueue_val);
+		}
+	}
+	while(qqueue->dequeue(3, 0, qqueue_val)) 
+	{
+		if(qqueue_val != INT_MIN)
+		{
+			flag = true;
+			printf("%d ", qqueue_val);
+			fprintf(statefile, "%d ", qqueue_val);
+		}
+	}
+	if(flag == false) fprintf(statefile, "-999 ");
+	printf("\n");
+	fprintf(statefile, "\n");
 }
     return 0; 
 } 
